@@ -1,11 +1,11 @@
-# 🧠 Works in Prod
+# Works in Prod
 
 > *A dashboard, a philosophy, and a joke that got serious.*
 
 **Works in Prod** is a living, self-updating MarTech-ops observability demo and personal portfolio project by **Jerusha Gray**.  
 It proves that clarity, governance, and humor can coexist in production.
 
-🔗 **Live Site:** [https://worksinprod.com](https://worksinprod.com)  
+🔗 **Live Site:** https://worksinprod.app/
 📄 **Docs:** [/docs/index.md](./docs/index.md) — includes [PRD_v1.2.md](./docs/PRD_v1.2.md)
 
 
@@ -31,7 +31,7 @@ It started as an inside joke (*“It works in prod”*) and became a statement a
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 
 Vercel (Next.js 14 + TailwindCSS)
@@ -52,7 +52,7 @@ Supabase (Postgres)
 
 ---
 
-## 🧠 Philosophy
+## Philosophy
 
 > *“I build systems that work — at least once.”*
 
@@ -62,7 +62,7 @@ The humor isn’t decoration — it’s commentary on operational reality.
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
 - [Next.js 14](https://nextjs.org/)
 - [TailwindCSS](https://tailwindcss.com/)
@@ -73,7 +73,7 @@ The humor isn’t decoration — it’s commentary on operational reality.
 
 ---
 
-## ⚙️ Local Setup
+## Local Setup
 
 ```bash
 # 1. Clone the repo
@@ -94,7 +94,7 @@ npm run dev
 # 5. Deploy to Vercel
 vercel deploy
 
-📊 Data Schema (Simplified)
+Data Schema (Simplified)
 | Table           | Purpose                                    |
 | --------------- | ------------------------------------------ |
 | `tools`         | Stores mock MarTech stack inventory.       |
@@ -103,7 +103,7 @@ vercel deploy
 | `views`         | Aggregates trends and recent logs.         |
 | `trigger`       | Cleans metrics older than 7 days.          |
 
-🧭 Roadmap
+Roadmap
 | Phase    | Focus                          | Key Additions                        |
 | -------- | ------------------------------ | ------------------------------------ |
 | **v0.1** | MVP live dashboard             | Stack tracker · heartbeat · Ops Feed |
@@ -117,7 +117,7 @@ vercel deploy
 | Empty State | “Suspiciously quiet.”                |
 | Footer      | “Last checked: still works in prod.” |
 
-💬 Sample Microcopy
+Sample Microcopy
 | Context     | Text                                 |
 | ----------- | ------------------------------------ |
 | Loading     | “Deploying good intentions…”         |
@@ -125,7 +125,7 @@ vercel deploy
 | Empty State | “Suspiciously quiet.”                |
 | Footer      | “Last checked: still works in prod.” |
 
-🧱 Project Structure
+Project Structure
 works-in-prod/
 ├── pages/
 │   ├── index.tsx          # Landing
@@ -142,13 +142,13 @@ works-in-prod/
 ├── LICENSE
 └── README.md
 
-🧩 License
+License
 
 Released under the MIT License
  © 2025 Jerusha Gray.
 Use, learn, and adapt freely — just give credit and don’t sue.
 
-✨ Acknowledgments
+ Acknowledgments
 
 The dev/ops community that keeps things running “in prod.”
 
