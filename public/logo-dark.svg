@@ -1,0 +1,21 @@
+<svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Left check mark - White -->
+  <path 
+    d="M 60,100 L 100,140 L 160,60"
+    stroke="#FFFFFF"
+    stroke-width="32"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+  
+  <!-- Right waveform - Lime -->
+  <path 
+    d="M 180,100 L 220,60 L 260,140 L 300,100 L 340,60"
+    stroke="#84CC16"
+    stroke-width="32"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>
