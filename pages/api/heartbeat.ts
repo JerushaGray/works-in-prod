@@ -1,31 +1,31 @@
 // -----------------------------------------------------------------------------
-// Works in Prod — Heartbeat Endpoint (v4: Batched + Summary Metrics)
+// Works in Prod — Heartbeat Endpoint (v5: Unified + Error-Aware)
 // -----------------------------------------------------------------------------
 //
 // Purpose:
-//   Logs simulated system drift and performance metrics to Supabase.
-//   Triggered manually or by Supabase Cron.
+//   Refreshes operational metrics for the unified martech_stack table,
+//   logs drift + audit events, and records summary metrics to heartbeat_log.
 //
 // Tables:
-//   tools_index(id, name, category, vendor, updated_at)
-//   stack_audit_log(id, tool_id, change_type, changed_field,
-//                   previous_value, new_value, changed_by, change_reason, created_at)
-//   heartbeat_log(id, run_time, updated_tools, inserted_metrics,
-//                 duration_ms, status, message,
-//                 avg_health numeric, avg_latency numeric)
+//   martech_stack(id, tool_name, health_score, licensed_seats, active_users_30d, utilization_rate)
+//   stack_audit_log(...)
+//   heartbeat_log(...)
 //
 // -----------------------------------------------------------------------------
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@supabase/supabase-js'
 
+// ───────────────────────────────────────────────
+// Supabase client (server-side key)
+// ───────────────────────────────────────────────
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SECRET_KEY!
 )
 
 // ───────────────────────────────────────────────
-// Utility helpers
+// Utility functions
 // ───────────────────────────────────────────────
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n))
@@ -46,87 +46,122 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const start = performance.now()
   const nowIso = new Date().toISOString()
+  let contextMessage = 'OK'
+  let runStatus: 'success' | 'warning' | 'error' = 'success'
 
   try {
-    // 1️⃣ Load all tools
-    const { data: tools, error: toolsError } = await supabase
-      .from('tools_index')
-      .select('id, name, category, vendor, updated_at')
+    // 1️⃣ Load current tools from martech_stack
+    const { data: stack, error: fetchError } = await supabase
+      .from('martech_stack')
+      .select('id, tool_name, health_score, licensed_seats, active_users_30d, utilization_rate')
 
-    if (toolsError) throw toolsError
+    if (fetchError) {
+      runStatus = 'error'
+      contextMessage = `Fetch failed: ${fetchError.message}`
+      throw fetchError
+    }
 
-    if (!tools || tools.length === 0) {
+    if (!stack || stack.length === 0) {
+      runStatus = 'warning'
+      contextMessage = 'No tools found in martech_stack'
       const duration_ms = Math.round(performance.now() - start)
       await supabase.from('heartbeat_log').insert({
         run_time: nowIso,
         updated_tools: 0,
         inserted_metrics: 0,
         duration_ms,
-        status: 'success',
-        message: 'No tools found in tools_index',
+        status: runStatus,
+        message: contextMessage,
         avg_health: 0,
         avg_latency: 0
       })
-      return res.status(200).json({ ok: true, updated: 0, inserted: 0, message: 'No tools found' })
+      return res.status(200).json({ ok: true, message: contextMessage })
     }
 
-    // 2️⃣ Simulate drift for all tools
-    const auditRows: any[] = []
+    // 2️⃣ Generate simulated drift + audit events
+    const updates: any[] = []
+    const audits: any[] = []
     const healthValues: number[] = []
-    const latencyValues: number[] = []
+    const utilValues: number[] = []
 
-    for (const t of tools) {
-      const healthScore = jitter(95, 3, 85, 100)
-      const latency = Math.round(jitter(300, 50, 100, 800))
-      const changeType = latency > 600 ? 'Performance Degradation' : 'Routine Update'
+    for (const t of stack) {
+      const newHealth = jitter(t.health_score ?? 85, 3, 60, 100)
+      const baseUsers = t.active_users_30d ?? 0
+      const seats = t.licensed_seats ?? 0
+      const userDrift = clamp(baseUsers + Math.round((Math.random() - 0.5) * 10), 0, seats)
+      const utilization = seats > 0 ? userDrift / seats : 0
 
-      auditRows.push({
+      updates.push({
+        id: t.id,
+        health_score: newHealth,
+        active_users_30d: userDrift,
+        utilization_rate: utilization,
+        updated_at: nowIso
+      })
+
+      audits.push({
         tool_id: t.id,
-        change_type: changeType,
-        changed_field: 'heartbeat_sim',
-        previous_value: 'N/A',
-        new_value: `Health ${healthScore} | Latency ${latency}ms`,
+        change_type: 'Automated Drift',
+        changed_field: 'health/utilization',
+        previous_value: `H:${t.health_score ?? 'NA'} U:${t.utilization_rate ?? 'NA'}`,
+        new_value: `H:${newHealth.toFixed(1)} U:${utilization.toFixed(2)}`,
         changed_by: 'System',
-        change_reason: 'Automated heartbeat check',
+        change_reason: 'Routine heartbeat drift',
         created_at: nowIso
       })
 
-      healthValues.push(healthScore)
-      latencyValues.push(latency)
+      healthValues.push(newHealth)
+      utilValues.push(utilization)
     }
 
-    const avgHealth = healthValues.reduce((a, b) => a + b, 0) / healthValues.length
-    const avgLatency = latencyValues.reduce((a, b) => a + b, 0) / latencyValues.length
+    // 3️⃣ Apply batch updates to martech_stack
+    const { error: upsertError } = await supabase
+      .from('martech_stack')
+      .upsert(updates, { onConflict: 'id' })
+    if (upsertError) {
+      runStatus = 'error'
+      contextMessage = `Upsert failed: ${upsertError.message}`
+      throw upsertError
+    }
 
-    // 3️⃣ Batch insert all audit logs at once
-    const { error: auditError } = await supabase.from('stack_audit_log').insert(auditRows)
-    if (auditError) throw auditError
+    // 4️⃣ Write audit records
+    const { error: auditError } = await supabase.from('stack_audit_log').insert(audits)
+    if (auditError) {
+      runStatus = 'warning'
+      contextMessage = `Partial success: metrics updated but audit log failed (${auditError.message})`
+    }
 
-    // 4️⃣ Write a single summary row to heartbeat_log
+    // 5️⃣ Log summary metrics
+    const avgHealth =
+      healthValues.reduce((a, b) => a + b, 0) / healthValues.length
+    const avgUtil =
+      utilValues.reduce((a, b) => a + b, 0) / utilValues.length
     const duration_ms = Math.round(performance.now() - start)
+
     const { error: logError } = await supabase.from('heartbeat_log').insert({
       run_time: nowIso,
-      updated_tools: tools.length,
-      inserted_metrics: auditRows.length,
+      updated_tools: updates.length,
+      inserted_metrics: audits.length,
       duration_ms,
-      status: 'success',
-      message: 'Batched heartbeat (v4 with summary metrics)',
+      status: runStatus,
+      message: contextMessage,
       avg_health: Math.round(avgHealth * 100) / 100,
-      avg_latency: Math.round(avgLatency * 100) / 100
+      avg_utilization: Math.round(avgUtil * 10000) / 100
     })
     if (logError) throw logError
 
     return res.status(200).json({
       ok: true,
-      updated: tools.length,
-      inserted: auditRows.length,
-      avg_health: Math.round(avgHealth * 100) / 100,
-      avg_latency: Math.round(avgLatency * 100) / 100,
-      duration_ms
+      updated: updates.length,
+      inserted: audits.length,
+      avg_health: avgHealth.toFixed(2),
+      avg_utilization: (avgUtil * 100).toFixed(1) + '%',
+      duration_ms,
+      status: runStatus,
+      message: contextMessage
     })
   } catch (err: any) {
     const duration_ms = Math.round(performance.now() - start)
-
     try {
       await supabase.from('heartbeat_log').insert({
         run_time: nowIso,
@@ -134,12 +169,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         inserted_metrics: 0,
         duration_ms,
         status: 'error',
-        message: `Heartbeat failed: ${err.message}`,
+        message: `Unhandled error: ${err?.message ?? 'unknown'}`,
         avg_health: 0,
-        avg_latency: 0
+        avg_utilization: 0
       })
     } catch {}
-
-    return res.status(500).json({ ok: false, error: err?.message ?? 'unknown error' })
+    return res.status(500).json({
+      ok: false,
+      error: err?.message ?? 'unknown error',
+      message: contextMessage
+    })
   }
 }
