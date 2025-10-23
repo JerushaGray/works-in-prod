@@ -1,15 +1,24 @@
-// Starter Component Library
+// Starter Component Library - TypeScript Version
 // Copy these as you need them while building
+
+import React from 'react';
 
 // ========================================
 // Button Component
 // ========================================
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+}
+
 export function Button({ 
   children, 
   variant = 'primary',
   size = 'md',
+  className = '',
   ...props 
-}) {
+}: ButtonProps) {
   const variants = {
     primary: 'bg-brand-500 hover:bg-brand-600 text-dark',
     secondary: 'bg-accent-600 hover:bg-accent-700 text-white',
@@ -25,7 +34,7 @@ export function Button({
 
   return (
     <button 
-      className={`${variants[variant]} ${sizes[size]} font-semibold rounded-lg transition-colors`}
+      className={`${variants[variant]} ${sizes[size]} ${className} font-semibold rounded-lg transition-colors`}
       {...props}
     >
       {children}
@@ -33,15 +42,14 @@ export function Button({
   );
 }
 
-// Usage:
-// <Button>Primary CTA</Button>
-// <Button variant="secondary">Learn More</Button>
-// <Button variant="outline" size="sm">Details</Button>
-
 // ========================================
 // Logo Component (with auto dark mode)
 // ========================================
-export function Logo({ className = "h-8" }) {
+interface LogoProps {
+  className?: string;
+}
+
+export function Logo({ className = "h-8" }: LogoProps) {
   return (
     <>
       {/* Light mode: Purple + Lime */}
@@ -64,7 +72,12 @@ export function Logo({ className = "h-8" }) {
 // ========================================
 // Card Component
 // ========================================
-export function Card({ children, className = "" }) {
+interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function Card({ children, className = "" }: CardProps) {
   return (
     <div className={`bg-white dark:bg-dark-100 rounded-xl p-6 border border-gray-200 dark:border-dark-200 hover:border-brand-500 transition-all ${className}`}>
       {children}
@@ -98,7 +111,12 @@ export function Nav() {
 // ========================================
 // Status Badge
 // ========================================
-export function StatusBadge({ status = 'success', children }) {
+interface StatusBadgeProps {
+  status?: 'success' | 'warning' | 'error' | 'info';
+  children: React.ReactNode;
+}
+
+export function StatusBadge({ status = 'success', children }: StatusBadgeProps) {
   const styles = {
     success: 'bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-400',
     warning: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400',
@@ -116,7 +134,14 @@ export function StatusBadge({ status = 'success', children }) {
 // ========================================
 // Metric Card (for dashboard)
 // ========================================
-export function MetricCard({ title, value, change, trend = 'up' }) {
+interface MetricCardProps {
+  title: string;
+  value: string;
+  change?: string;
+  trend?: 'up' | 'down';
+}
+
+export function MetricCard({ title, value, change, trend = 'up' }: MetricCardProps) {
   return (
     <Card>
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{title}</p>
@@ -134,9 +159,6 @@ export function MetricCard({ title, value, change, trend = 'up' }) {
     </Card>
   );
 }
-
-// Usage:
-// <MetricCard title="Uptime" value="99.9%" change="+0.2%" trend="up" />
 
 // ========================================
 // Hero Section
@@ -164,7 +186,12 @@ export function Hero() {
 // ========================================
 // Simple Table (for stack inventory)
 // ========================================
-export function Table({ headers, rows }) {
+interface TableProps {
+  headers: string[];
+  rows: React.ReactNode[][];
+}
+
+export function Table({ headers, rows }: TableProps) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
@@ -196,11 +223,17 @@ export function Table({ headers, rows }) {
 // ========================================
 // Link Component
 // ========================================
-export function Link({ href, children, className = "" }) {
+interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string;
+  children: React.ReactNode;
+}
+
+export function Link({ href, children, className = "", ...props }: LinkProps) {
   return (
     <a 
       href={href}
       className={`text-accent-600 hover:text-accent-700 dark:text-accent-400 dark:hover:text-accent-300 transition-colors ${className}`}
+      {...props}
     >
       {children}
     </a>
@@ -210,7 +243,12 @@ export function Link({ href, children, className = "" }) {
 // ========================================
 // Container (max-width wrapper)
 // ========================================
-export function Container({ children, className = "" }) {
+interface ContainerProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function Container({ children, className = "" }: ContainerProps) {
   return (
     <div className={`max-w-7xl mx-auto px-6 ${className}`}>
       {children}
@@ -221,7 +259,12 @@ export function Container({ children, className = "" }) {
 // ========================================
 // Section (with consistent spacing)
 // ========================================
-export function Section({ children, className = "" }) {
+interface SectionProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function Section({ children, className = "" }: SectionProps) {
   return (
     <section className={`py-16 md:py-24 ${className}`}>
       {children}
@@ -232,7 +275,13 @@ export function Section({ children, className = "" }) {
 // ========================================
 // Grid Layout
 // ========================================
-export function Grid({ children, cols = 3, className = "" }) {
+interface GridProps {
+  children: React.ReactNode;
+  cols?: 2 | 3 | 4;
+  className?: string;
+}
+
+export function Grid({ children, cols = 3, className = "" }: GridProps) {
   const gridCols = {
     2: 'grid-cols-1 md:grid-cols-2',
     3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
@@ -245,10 +294,3 @@ export function Grid({ children, cols = 3, className = "" }) {
     </div>
   );
 }
-
-// Usage:
-// <Grid cols={3}>
-//   <MetricCard ... />
-//   <MetricCard ... />
-//   <MetricCard ... />
-// </Grid>
