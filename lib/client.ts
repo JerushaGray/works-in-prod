@@ -1,20 +1,13 @@
-import { createBrowserClient } from "@supabase/ssr"
+import { createBrowserClient } from "@supabase/ssr";
+import type { Database } from "@/types/database.types";
 
-let client: ReturnType<typeof createBrowserClient> | null = null
+let browserClient: ReturnType<typeof createBrowserClient<Database>> | null = null;
 
 export function getSupabaseBrowserClient() {
-  if (client) {
-    return client
+  if (!browserClient) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    browserClient = createBrowserClient<Database>(url, anonKey);
   }
-
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error("Missing Supabase environment variables")
-  }
-
-  client = createBrowserClient(supabaseUrl, supabaseAnonKey)
-
-  return client
+  return browserClient;
 }
