@@ -31,31 +31,72 @@ export default function AboutPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h1 className="text-5xl font-extrabold">
-          <span className="bg-gradient-to-r from-[#84CC16] to-[#8B5CF6] bg-clip-text text-transparent">
-            About Works in Prod
-          </span>
-        </h1>
-        <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-          This demo was built by Jerusha Gray. It showcases a marketing operations dashboard built with Supabase, Next.js, and Vercel.
-        </p>
+        <motion.h1
+          className="text-5xl font-extrabold bg-gradient-to-r from-[#84CC16] to-[#8B5CF6] bg-clip-text text-transparent"
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "linear",
+          }}
+          style={{
+            backgroundSize: "200% 200%",
+          }}
+        >
+          About Works in Prod
+        </motion.h1>
+
+        <motion.p
+          className="text-lg text-gray-700 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+        >
+          Works in Prod explores how complex systems behave in real environments—fluid, adaptive, and full of learning.{" "}
+          Created by Jerusha Gray, it continues an exploration into{" "}
+          Marketing Operations, MarTech infrastructure, and Data Strategy.
+        </motion.p>
       </motion.header>
 
       {/* Main Content */}
       <motion.section
         className="max-w-3xl mx-auto space-y-6"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.7 }}
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: 0.25,
+            },
+          },
+        }}
       >
-        <p className="text-base text-gray-700 leading-relaxed">
-          I'm building the kind of solutions I've wished for years.
-          You can view the open-source code or connect with me to discuss how to bring
-          data-driven clarity to your marketing operations.
-        </p>
-        <p className="text-base text-gray-700 leading-relaxed">
-          Let's Build Something Epic Together
-        </p>
+        <motion.p
+          className="text-base text-gray-700 leading-relaxed"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0 },
+          }}
+        >
+          The project showcases a MarTech Stack Management Tool built with{" "}
+          Supabase, Next.js, and Vercel. 
+          It simulates and tracks system health, integration flow, and performance insights across a connected stack.
+        </motion.p>
+
+        <motion.p
+          className="text-base text-gray-700 leading-relaxed"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0 },
+          }}
+        >
+          The goal is to bring clarity, stability, and operational calm to modern marketing ecosystems.{" "}
+          Let’s build something remarkable and make sure it truly works in prod.
+        </motion.p>
       </motion.section>
 
       {/* Call to Action / Links */}
@@ -63,27 +104,39 @@ export default function AboutPage() {
         className="flex gap-6 mt-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
       >
-        <Button asChild variant="outline">
-          <Link
-            href="https://github.com/jerushagray/works-in-prod"
-            target="_blank"
-            rel="noopener noreferrer"
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+          <Button
+            asChild
+            variant="outline"
+            className="transition-all duration-300 hover:shadow-md hover:border-[#84CC16]"
           >
-            View on GitHub
-          </Link>
-        </Button>
+            <Link
+              href="https://github.com/jerushagray/works-in-prod"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on GitHub
+            </Link>
+          </Button>
+        </motion.div>
 
-        <Button asChild variant="outline">
-          <Link
-            href="https://www.linkedin.com/in/jerushagray"
-            target="_blank"
-            rel="noopener noreferrer"
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+          <Button
+            asChild
+            variant="outline"
+            className="transition-all duration-300 hover:shadow-md hover:border-[#8B5CF6]"
           >
-            Let's Connect on LinkedIn
-          </Link>
-        </Button>
+            <Link
+              href="https://www.linkedin.com/in/jerushagray"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Connect on LinkedIn
+            </Link>
+          </Button>
+        </motion.div>
       </motion.footer>
     </div>
   );

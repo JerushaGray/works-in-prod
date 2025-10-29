@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import type { MartechTool, StatusFilter, DepartmentFilter } from "@/lib/martech";
 import {
@@ -32,6 +31,7 @@ interface MartechTableProps {
   onStatusFilterChange: (filter: StatusFilter) => void;
   onDepartmentFilterChange: (filter: DepartmentFilter) => void;
   onRefresh: () => void;
+  onViewDetails: (toolId: string) => void; // ✅ added for drawer integration
 }
 
 type SortField = "tool_name" | "cost_annual" | "health_score";
@@ -46,12 +46,12 @@ export function MartechTable({
   onStatusFilterChange,
   onDepartmentFilterChange,
   onRefresh,
+  onViewDetails, // ✅ new prop
 }: MartechTableProps) {
   const [sortField, setSortField] = useState<SortField>("tool_name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const router = useRouter();
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -248,7 +248,7 @@ export function MartechTable({
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => router.push(`/tools/${tool.id}`)}
+                        onClick={() => onViewDetails(tool.id)} // ✅ call drawer handler
                         className="rounded-full px-4 py-1 text-sm font-medium border-primary/40 text-primary hover:bg-primary/10 transition-all"
                       >
                         View Details

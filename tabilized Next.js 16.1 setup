@@ -1,0 +1,31 @@
+warning: in the working copy of 'app/dashboard/DashboardClientPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/dashboard/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/martech-table.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/ui/button.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/ui/card.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/ui/skeleton.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/ui/table.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/client.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tsconfig.json', LF will be replaced by CRLF the next time Git touches it
+ README-DRAFT.md                       |   4 [32m+[m
+ app/about/page.tsx                    |  12 [32m+[m[31m-[m
+ app/dashboard/DashboardClientPage.tsx |  47 [32m++[m[31m-[m
+ app/dashboard/page.tsx                |   8 [32m+[m[31m-[m
+ app/tools/[id]/page.tsx               | 218 [31m------------[m
+ components/charts/revenue-charts.tsx  |  92 [31m-----[m
+ components/martech-table.tsx          |   6 [32m+[m[31m-[m
+ components/ui/button.tsx              |  72 [32m++[m[31m--[m
+ components/ui/card.tsx                | 104 [32m+++[m[31m---[m
+ components/ui/dialog.tsx              |  79 [31m-----[m
+ components/ui/select.tsx              | 198 [31m-----------[m
+ components/ui/skeleton.tsx            |  10 [32m+[m[31m-[m
+ components/ui/table.tsx               |   2 [32m+[m
+ lib/client.ts                         |  23 [32m+[m[31m-[m
+ lib/server.ts                         |  31 [31m--[m
+ lib/supabase.ts                       |  41 [32m++[m[31m-[m
+ package-lock.json                     | 619 [32m++++++++++++++++++++++++++++++[m[31m----[m
+ package.json                          |   9 [32m+[m[31m-[m
+ tsconfig.json                         |   3 [32m+[m[31m-[m
+ 19 files changed, 761 insertions(+), 817 deletions(-)

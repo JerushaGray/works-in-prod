@@ -29,8 +29,8 @@ export default function LandingPage() {
             <Button size="lg" variant="outline" className="text-base px-8 h-12" asChild>
               <Link href="/dashboard">View Dashboard</Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-base px-8 h-12 bg-transparent">
-              Learn More
+            <Button size="lg" variant="outline" className="text-base px-8 h-12" asChild>
+              <Link href="/about">Learn More</Link>
             </Button>
           </div>
 

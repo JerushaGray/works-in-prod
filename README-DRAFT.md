@@ -88,6 +88,10 @@ see [App Router Boundaries](./app-router-boundaries.md).
 For details on how this project implements type-safe Supabase integration with TypeScript,
 see [TypeScript + Supabase Integration](./typescript-supabase.md).
 
+## 📜 Version History
+
+For a detailed history of updates and milestones, see [CHANGELOG](../CHANGELOG.md).
+
 
 
 Roadmap
