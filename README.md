@@ -12,14 +12,14 @@ It proves that clarity, governance, and humor can coexist in production.
 
 ---
 
-## 🚀 Overview
+## Overview
 
 Built with **Next.js**, **Supabase**, and **Vercel**, Works in Prod simulates the health of a marketing-tech stack — uptime, latency, and data quality — through automated hourly *heartbeats*.  
 It started as an inside joke (*“It works in prod”*) and became a statement about real-world systems: imperfect, functional, and still standing.
 
 ---
 
-## 🧩 Core Features
+## Core Features
 
 | Feature              | Description                                                     |
 | -------------------- | --------------------------------------------------------------- |
