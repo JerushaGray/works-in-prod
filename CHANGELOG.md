@@ -2,6 +2,31 @@
 
 All notable changes to **Work In Prod** are documented here following [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) standards.
 
+---
+
+## [2026-06-28] - Repo consolidation + App Router migration
+
+### Removed
+- Deleted `pages/` directory entirely: `_app.tsx`, `_document.tsx` (inert under App Router), `api/hello.ts` (boilerplate, no callers), and `api/heartbeat.ts` (ported — see below).
+- Deleted `README-DRAFT.md` and corrupted root file `"tabilized Next.js 16.1 setup"` (pasted git diff output with trailing PUA Unicode byte).
+- Untracked and deleted `supabase/.temp/` (local CLI cache); added to `.gitignore`.
+
+### Added
+- `app/api/heartbeat/route.ts` — App Router port of the heartbeat endpoint. Rewrote from Pages API handler signature (`default export`, `NextApiRequest`/`NextApiResponse`) to named `GET`/`POST` exports using the Web API `Request`/`Response`. Supabase client moved inside the handler to avoid build-time crash. Added `export const dynamic = 'force-dynamic'`.
+
+### Changed
+- Moved `CODE-OF-CONDUCT.md`, `CONTRIBUTING.md`, `SECURITY.md` into `.github/` with GitHub-canonical names for auto-detection.
+- Updated `.gitattributes`: `* text=auto` → `* text=auto eol=lf` to enforce LF normalization.
+- Fixed clone URL in README (`jerusha-gray` → `JerushaGray`), bumped Next.js 14 → 16 across README, `docs/PRD_v1.2.md`, and `docs/brand/design-notes.md`, removed duplicate microcopy table, rewrote Project Structure to reflect real `app/` tree.
+- Updated `docs/CHANGELOG.md`: `works-in-prod.vercel.app` → `worksinprod.app`; annotated migrated heartbeat scope.
+
+---
+
+## [2025-12-16] - Security: React Server Components CVE patch
+
+### Security
+- Updated `next`, `react-server-dom-webpack`, `react-server-dom-parcel`, and `react-server-dom-turbopack` to patched versions addressing the React Server Components CVE (VU#H6FYSS). Applied automatically via Vercel's fix-react2shell-next tool (PR #4).
+
 ## [2025-10-29] - Supabase Type Integration + Documentation
 
 # 🧾 CHANGELOG — October 29, 2025
