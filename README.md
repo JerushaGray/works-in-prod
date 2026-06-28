@@ -34,7 +34,7 @@ It started as an inside joke (*“It works in prod”*) and became a statement a
 ## Architecture
 
 
-Vercel (Next.js 14 + TailwindCSS)
+Vercel (Next.js 16 + TailwindCSS)
 ↓ read/write
 Supabase (Postgres)
 ├─ tables: tools · metrics · heartbeat_log
@@ -64,7 +64,7 @@ The humor isn’t decoration — it’s commentary on operational reality.
 
 ## Tech Stack
 
-- [Next.js 14](https://nextjs.org/)
+- [Next.js 16](https://nextjs.org/)
 - [TailwindCSS](https://tailwindcss.com/)
 - [Supabase](https://supabase.com/)
 - [Vercel](https://vercel.com/)
@@ -77,7 +77,7 @@ The humor isn’t decoration — it’s commentary on operational reality.
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/jerusha-gray/works-in-prod.git
+git clone https://github.com/JerushaGray/works-in-prod.git
 cd works-in-prod
 
 # 2. Install dependencies
@@ -110,13 +110,6 @@ Roadmap
 | **v0.2** | Data editing + realtime trends | CRUD · sparklines                    |
 | **v1.0** | Full portfolio hub             | Playbooks · Writing · Contact        |
 
-| Context     | Text                                 |
-| ----------- | ------------------------------------ |
-| Loading     | “Deploying good intentions…”         |
-| Success     | “Stable (ish).”                      |
-| Empty State | “Suspiciously quiet.”                |
-| Footer      | “Last checked: still works in prod.” |
-
 Sample Microcopy
 | Context     | Text                                 |
 | ----------- | ------------------------------------ |
@@ -127,18 +120,21 @@ Sample Microcopy
 
 Project Structure
 works-in-prod/
-├── pages/
-│   ├── index.tsx          # Landing
-│   ├── stack.tsx          # Main dashboard
-│   ├── about.tsx          # Bio & ethos
+├── app/
+│   ├── layout.tsx                    # Root layout
+│   ├── page.tsx                      # Home
+│   ├── about/
+│   │   └── page.tsx
+│   ├── dashboard/
+│   │   ├── page.tsx
+│   │   └── DashboardClientPage.tsx
 │   └── api/
-│       ├── tools.ts       # Fetch tool data
-│       └── heartbeat.ts   # (optional) Manual trigger
-├── lib/supabaseClient.js
+│       └── heartbeat/
+│           └── route.ts              # Manual trigger / cron target
+├── lib/                              # Supabase clients + utilities
 ├── public/
 ├── docs/
-│   ├── PRD_v1.2.md
-│   └── schema.sql
+│   └── PRD_v1.2.md
 ├── LICENSE
 └── README.md
 

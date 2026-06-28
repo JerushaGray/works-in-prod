@@ -107,7 +107,7 @@ Since lime is the primary brand color, status indicators use:
 
 | Tool            | Use                        | Why                                              |
 | --------------- | -------------------------- | ------------------------------------------------ |
-| **Next.js 14**  | Frontend + API routes      | Fast builds, easy routing, Vercel-native.        |
+| **Next.js 16**  | Frontend + API routes      | Fast builds, easy routing, Vercel-native.        |
 | **TailwindCSS** | Styling                    | Utility-first for clarity and scalability.       |
 | **Recharts**    | Data visualization         | Lightweight and expressive for trend data.       |
 | **Supabase**    | Data + scheduled functions | Easy heartbeat logic + SQL view generation.      |
