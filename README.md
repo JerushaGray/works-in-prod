@@ -40,12 +40,12 @@ Supabase (Postgres)
 ├─ tables: tools · metrics · heartbeat_log
 ├─ views: tool_health_trends · heartbeat_recent
 ├─ trigger: purge_old_metrics() → deletes >7 days
-└─ Edge Function: heartbeat → hourly data drift
+└─ API route: /api/heartbeat → hourly data drift
 
 
 **Heartbeat cycle**
 1. Cron triggers hourly  
-2. Supabase Edge Function jitters metric values  
+2. Next.js route handler jitters metric values  
 3. Inserts new metrics + updates tool records  
 4. Writes summary to `heartbeat_log`  
 5. Trigger purges old metrics  
@@ -69,7 +69,6 @@ The humor isn’t decoration — it’s commentary on operational reality.
 - [Supabase](https://supabase.com/)
 - [Vercel](https://vercel.com/)
 - [Recharts](https://recharts.org/)
-- [React Flow](https://reactflow.dev/)
 
 ---
 
@@ -93,8 +92,9 @@ npm run dev
 
 # 5. Deploy to Vercel
 vercel deploy
+```
 
-Data Schema (Simplified)
+## Data Schema (Simplified)
 | Table           | Purpose                                    |
 | --------------- | ------------------------------------------ |
 | `tools`         | Stores mock MarTech stack inventory.       |
@@ -103,14 +103,16 @@ Data Schema (Simplified)
 | `views`         | Aggregates trends and recent logs.         |
 | `trigger`       | Cleans metrics older than 7 days.          |
 
-Roadmap
+## Roadmap
+
 | Phase    | Focus                          | Key Additions                        |
 | -------- | ------------------------------ | ------------------------------------ |
 | **v0.1** | MVP live dashboard             | Stack tracker · heartbeat · Ops Feed |
 | **v0.2** | Data editing + realtime trends | CRUD · sparklines                    |
 | **v1.0** | Full portfolio hub             | Playbooks · Writing · Contact        |
 
-Sample Microcopy
+## Sample Microcopy
+
 | Context     | Text                                 |
 | ----------- | ------------------------------------ |
 | Loading     | “Deploying good intentions…”         |
@@ -118,7 +120,9 @@ Sample Microcopy
 | Empty State | “Suspiciously quiet.”                |
 | Footer      | “Last checked: still works in prod.” |
 
-Project Structure
+## Project Structure
+
+```
 works-in-prod/
 ├── app/
 │   ├── layout.tsx                    # Root layout
@@ -137,21 +141,17 @@ works-in-prod/
 │   └── PRD_v1.2.md
 ├── LICENSE
 └── README.md
+```
 
-License
+## License
 
-Released under the MIT License
- © 2025 Jerusha Gray.
+Released under the MIT License — © 2025 Jerusha Gray.  
 Use, learn, and adapt freely — just give credit and don’t sue.
 
- Acknowledgments
+## Acknowledgments
 
-The dev/ops community that keeps things running “in prod.”
-
-Vercel
- + Supabase
- for making it absurdly easy to ship experiments.
-
+The dev/ops community that keeps things running “in prod.”  
+Vercel + Supabase for making it absurdly easy to ship experiments.  
 Everyone who has ever said, “It’s fine, it works in prod.”
 
-Ship it. Test it. Watch it work (at least once).
+*Ship it. Test it. Watch it work (at least once).*
