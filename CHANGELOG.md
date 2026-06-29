@@ -4,6 +4,21 @@ All notable changes to **Work In Prod** are documented here following [Keep a Ch
 
 ---
 
+## [2026-06-29] - Repo cleanup + naming normalization (v0.9.0)
+
+### Changed
+
+- Standardized all component filenames to kebab-case: `Header.tsx` → `header.tsx`, `DashboardClientPage.tsx` → `dashboard-client-page.tsx`. Updated all imports accordingly.
+- Renamed `docs/project-continuation-brief_v2` → `project-continuation-brief_v2.md` (added missing extension).
+- Renamed `docs/brand/examples/example page` → `example-page.tsx` (removed space from filename).
+
+### Removed
+
+- Deleted `styles/globals.css` — unused Tailwind v3 remnant; `app/globals.css` (Tailwind v4) is the active stylesheet.
+- Removed empty `supabase/` directory.
+
+---
+
 ## [2026-06-28] - Repo consolidation + App Router migration
 
 ### Removed
