@@ -72,7 +72,7 @@ Auth, live vendor APIs, multi-user features.
 ---
 
 ## 6 · System Architecture
-Vercel (Next.js 14 + Tailwind)
+Vercel (Next.js 16 + Tailwind)
 ↓ read
 Supabase (Postgres)
 ├─ tables: tools · metrics · heartbeat_log

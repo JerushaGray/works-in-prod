@@ -1,7 +1,7 @@
 ## [v5.0.0] — Heartbeat API Refactor
 **Date:** 2025-10-22  
 **Author:** Jerusha Gray  
-**Scope:** `/pages/api/heartbeat.ts`
+**Scope:** `app/api/heartbeat/route.ts` *(migrated from `pages/api/heartbeat.ts` — see chore/repo-cleanup)*
 
 ### Summary
 Refactored the Works-in-Prod heartbeat endpoint to align with the new unified `martech_stack` schema and introduce robust, structured error handling.  
@@ -37,4 +37,4 @@ This upgrade modernizes the core monitoring mechanism and prepares the backend f
 ### Verification
 To test locally or after deployment:
 ```bash
-curl -X POST https://works-in-prod.vercel.app/api/heartbeat
+curl -X POST https://worksinprod.app/api/heartbeat

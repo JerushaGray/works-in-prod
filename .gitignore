@@ -32,6 +32,9 @@ Thumbs.db
 .vscode/
 *.swp
 
+# Supabase local temp
+supabase/.temp/
+
 # Misc
 coverage/
 dist/

@@ -13,16 +13,19 @@
 //
 // -----------------------------------------------------------------------------
 
-import type { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@supabase/supabase-js'
 
+export const dynamic = 'force-dynamic'
+
 // ───────────────────────────────────────────────
-// Supabase client (server-side key)
+// Supabase client (server-side key, request-time)
 // ───────────────────────────────────────────────
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SECRET_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SECRET_KEY!
+  )
+}
 
 // ───────────────────────────────────────────────
 // Utility functions
@@ -37,13 +40,10 @@ function jitter(base: number, range: number, min = 0, max = 100) {
 }
 
 // ───────────────────────────────────────────────
-// Main handler
+// Route handlers
 // ───────────────────────────────────────────────
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST' && req.method !== 'GET') {
-    return res.status(405).json({ ok: false, error: 'Method not allowed' })
-  }
-
+async function runHeartbeat(): Promise<Response> {
+  const supabase = getSupabase()
   const start = performance.now()
   const nowIso = new Date().toISOString()
   let contextMessage = 'OK'
@@ -75,7 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         avg_health: 0,
         avg_latency: 0
       })
-      return res.status(200).json({ ok: true, message: contextMessage })
+      return Response.json({ ok: true, message: contextMessage })
     }
 
     // 2️⃣ Generate simulated drift + audit events
@@ -150,7 +150,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
     if (logError) throw logError
 
-    return res.status(200).json({
+    return Response.json({
       ok: true,
       updated: updates.length,
       inserted: audits.length,
@@ -174,10 +174,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         avg_utilization: 0
       })
     } catch {}
-    return res.status(500).json({
-      ok: false,
-      error: err?.message ?? 'unknown error',
-      message: contextMessage
-    })
+    return Response.json(
+      { ok: false, error: err?.message ?? 'unknown error', message: contextMessage },
+      { status: 500 }
+    )
   }
+}
+
+export async function GET() {
+  return runHeartbeat()
+}
+
+export async function POST() {
+  return runHeartbeat()
 }

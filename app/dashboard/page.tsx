@@ -1,5 +1,5 @@
 // /app/dashboard/page.tsx
-import { DashboardClientPage } from "./DashboardClientPage";
+import { DashboardClientPage } from "./dashboard-client-page";
 
 export const metadata = {
   title: "Dashboard | Works in Prod",
